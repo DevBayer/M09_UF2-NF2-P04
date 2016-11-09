@@ -35,7 +35,7 @@ public class Caixa extends Thread {
                 client.setDataSortida(new Date());
                 client.setCaixaAtes(this.num_caixa);
                 long diff = ( client.dataSortida.getTime() - client.dataEntrada.getTime() ) / 1000;
-                System.out.println("Caixa " + this.num_caixa + ", client a pagar: " + diff);
+                //System.out.println("Caixa " + this.num_caixa + ", client a pagar: " + diff);
                 this.queue.remove(i);
                 this.TotalClients++;
                 this.TotalCaixa += diff;
@@ -43,7 +43,7 @@ public class Caixa extends Thread {
                     // La caixera, per transacció, espera 1 segon...
                     Thread.sleep(1000);
                 }catch(InterruptedException e){
-                    System.out.println("RouterWorker::run() -> Err: "+e.getMessage());
+                    System.out.println("RouterModernWorker::run() -> Err: "+e.getMessage());
                 }
             }
             try {
@@ -51,7 +51,7 @@ public class Caixa extends Thread {
                     if(queue.size() == 0) this.wait();
                 }
             }catch(InterruptedException e){
-                System.out.println("RouterWorker::run() -> Err: "+e.getMessage());
+                System.out.println("RouterModernWorker::run() -> Err: "+e.getMessage());
             }
         }
     }

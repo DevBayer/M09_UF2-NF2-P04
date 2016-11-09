@@ -32,9 +32,13 @@ public class ClientWorker extends Thread {
             SuperMarket.getQueue().add(client);
             while(true){
                 if(!client.getStatus().equals("Ates")) {
-                    System.out.println("Client on queue list: " + client.toString());
+                    if(SuperMarket.debug) {
+                        System.out.println("Client on queue list: " + client.toString());
+                    }
                 }else{
-                    System.out.println("Client go home:" + client.toString());
+                    if(SuperMarket.debug) {
+                        System.out.println("Client go home:" + client.toString());
+                    }
                     break;
                 }
             }

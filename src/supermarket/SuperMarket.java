@@ -1,5 +1,6 @@
 package supermarket;
 
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -11,9 +12,13 @@ public class SuperMarket {
     ArrayList<Caixa> caixes = new ArrayList<>();
     ArrayList<Client> queue = new ArrayList<>();
     ArrayList<ClientWorker> PoolClientWorkers = new ArrayList<>();
+    Boolean debug = false;
+    public Boolean modern = true;
+    RouterModernWorker rw_modern;
+    RouterWorker rw_normal;
 
 
-    public SuperMarket() {
+    public SuperMarket(boolean modern) {
         this.caixes.add(new Caixa(1));
         this.caixes.add(new Caixa(2));
         this.caixes.add(new Caixa(3));
@@ -23,8 +28,24 @@ public class SuperMarket {
             c.start();
         }
 
-        RouterWorker rw = new RouterWorker(this);
-        rw.start();
+        changeRouter(modern);
+    }
+
+    public void changeRouter(boolean modern){
+        this.modern = modern;
+        if(modern){
+            if(rw_normal != null && rw_normal.isAlive()) {
+                rw_normal.stop();
+            }
+            rw_modern = new RouterModernWorker(this);
+            rw_modern.start();
+        }else{
+            if(rw_modern != null && rw_modern.isAlive()) {
+                rw_modern.stop();
+            }
+            rw_normal = new RouterWorker(this);
+            rw_normal.start();
+        }
     }
 
     public ArrayList<Caixa> getCaixes() {

@@ -33,6 +33,8 @@ public class Client {
 
     synchronized void setCaixaAtes(int i) { this.CaixaAtes = i; }
 
+
+
     @Override
     public String toString() {
         if(CaixaAtes > 0){

@@ -1,27 +1,35 @@
 package supermarket;
 
 import java.util.Date;
-import java.util.Random;
 
 /**
  * Created by 23878410v on 25/10/16.
  */
-public class RouterWorker extends Thread {
+public class RouterModernWorker extends Thread {
     SuperMarket SuperMarket;
 
-    public RouterWorker(supermarket.SuperMarket superMarket) {
+    public RouterModernWorker(supermarket.SuperMarket superMarket) {
         SuperMarket = superMarket;
     }
 
 
     @Override
     public void run() {
-        while(!SuperMarket.modern){
+        while(SuperMarket.modern){
             while(SuperMarket.queue.size() > 0){
-                // Determinem, de manera Random la caixa
-                Random randomGenerator = new Random();
-                Caixa tmp = SuperMarket.getCaixes().get(randomGenerator.nextInt(SuperMarket.getCaixes().size()));
-
+                // Determinem, quina es la caixa amb menys cua
+                int min = 9999;
+                Caixa tmp = null;
+                for (Caixa caixa: SuperMarket.caixes) {
+                        int OnQueue = caixa.getClientsOnQueue();
+                        if(OnQueue <= min){
+                            min = OnQueue;
+                            tmp = caixa;
+                        }
+                        if(SuperMarket.debug) {
+                            System.out.println("RouterModernWorker::QueueSize(" + SuperMarket.queue.size() + ") -> OnQueue(" + caixa.getNameCaixa() + ") size: " + caixa.getClientsOnQueue() + " vs size: " + min + " (" + tmp.getNameCaixa() + ")");
+                        }
+                }
                 // Li assignem a la Caixa, el Client 0
                 Client c = SuperMarket.queue.get(0);
                 c.setStatus(tmp.getNameCaixa());
