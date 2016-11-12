@@ -9,10 +9,18 @@ public class ClientWorker extends Thread {
     Client client;
     private int TempsSimulat;
 
+    public ClientWorker(supermarket.SuperMarket superMarket){
+        SuperMarket = superMarket;
+    }
+
     public ClientWorker(supermarket.SuperMarket superMarket, Client client) {
         SuperMarket = superMarket;
         this.client = client;
         System.out.println("Entra Client al Supermercat, "+client.dataEntrada.toString());
+    }
+
+    public void setClient(Client c){
+        this.client = c;
     }
 
     @Override
@@ -29,18 +37,11 @@ public class ClientWorker extends Thread {
                 Thread.sleep(5);
                 decisio = (int)(Math.random() * 10) + 1;
             }
+            // Afegim el client a la cua per a que sigui asignat a alguna caixa
             SuperMarket.getQueue().add(client);
-            while(true){
-                if(!client.getStatus().equals("Ates")) {
-                    if(SuperMarket.debug) {
-                        System.out.println("Client on queue list: " + client.toString());
-                    }
-                }else{
-                    if(SuperMarket.debug) {
-                        System.out.println("Client go home:" + client.toString());
-                    }
-                    break;
-                }
+            synchronized (this) {
+                // Notifiquem al client que estigui a la espera mentre es atés
+                this.wait();
             }
         }catch(InterruptedException e){
             System.out.printf("ClientWorker::run() -> Err: "+e.getMessage());

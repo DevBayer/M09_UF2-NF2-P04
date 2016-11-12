@@ -11,10 +11,12 @@ public class Client {
     String status;
     int CaixaAtes;
     Date dataRouter;
+    ClientWorker worker;
 
-    public Client(Date dataEntrada) {
+    public Client(Date dataEntrada, ClientWorker worker) {
         this.dataEntrada = dataEntrada;
         this.status = "Buscan";
+        this.worker = worker;
     }
 
     synchronized void setStatus(String s){
@@ -32,6 +34,10 @@ public class Client {
     }
 
     synchronized void setCaixaAtes(int i) { this.CaixaAtes = i; }
+
+    public long getTempsActivitat(){
+        return this.dataSortida.getTime() - this.dataEntrada.getTime();
+    }
 
 
 

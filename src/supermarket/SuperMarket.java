@@ -61,8 +61,9 @@ public class SuperMarket {
     }
 
     public void addClientNow(Date d){
-        Client c = new Client(d);
-        ClientWorker worker = new ClientWorker(this, c);
+        ClientWorker worker = new ClientWorker(this);
+        Client c = new Client(d, worker);
+        worker.setClient(c);
         worker.start();
         PoolClientWorkers.add(worker);
     }
